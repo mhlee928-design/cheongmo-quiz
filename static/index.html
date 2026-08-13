@@ -15,7 +15,7 @@ input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);borde
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab{padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-weight:800}.tab.active{background:#fff0f4;color:#b55370;border-color:#efb5c4}
 .editor{border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;background:#fffdfc}.editor h4{margin:0 0 10px}.answer-row{display:grid;grid-template-columns:42px 1fr 70px;gap:8px;align-items:center;margin:6px 0}.answer-row label{font-weight:800;text-align:center}.answer-row input{margin:0}.award-editor{display:grid;grid-template-columns:50px 1fr;gap:8px;align-items:start;margin:8px 0}.award-editor input{margin:0}.notice{background:#fff5f2;border-radius:12px;padding:11px;margin:10px 0;font-size:14px}.resultbox{background:#fff7f3;border-radius:18px;padding:18px;text-align:center}.winner{font-size:28px;font-weight:900;margin:8px 0}.bar{height:9px;background:#eee1dc;border-radius:99px;overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:var(--p)}
 @media(max-width:600px){.answers,.grid,.monitor{grid-template-columns:1fr}.card{padding:20px}.answer-row{grid-template-columns:35px 1fr 62px}}
-</style></head><body><div class="wrap">
+.final-title{font-size:1.5em;margin:18px 0 12px}</style></head><body><div class="wrap">
 
 <section id="home" class="card center"><div class="big">💕</div><h1>지원 ♥ 지현<br>같이놀자 청모 QUIZ</h1><p>지지커플 QUIZ + 지현지원 청모 AWARDS</p>
 <button class="btn" onclick="show('join')">참여하기</button> <button class="btn gray" onclick="show('login')">진행자</button></section>
@@ -27,7 +27,9 @@ input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);borde
 
 <section id="awards" class="card hidden"><span class="badge">💕 지현지원 청모 AWARDS</span><div class="top"><h2 id="aqt"></h2><span id="an" class="badge"></span></div><div id="ava" class="answers"></div><p id="am" class="center"></p><div id="awardPlayerResult" class="resultbox hidden"></div></section>
 
-<section id="final" class="card center hidden"><div class="big">🏆</div><h1>지현지원 청모 AWARDS</h1><div id="fr"></div><hr><h2>지지커플 QUIZ 최종 순위</h2><div id="rank"></div></section>
+<section id="final" class="card center hidden"><div class="big">🏆</div>
+<h2 class="final-title">지지커플 QUIZ 최종 순위</h2><div id="rank"></div>
+<hr><h2 class="final-title">지현지원 청모 AWARDS</h2><div id="fr"></div></section>
 
 <section id="login" class="card hidden"><h2>🎤 진행자 입장</h2><input id="pw" type="password" placeholder="관리자 비밀번호"><button class="btn" onclick="admin()">입장</button></section>
 
