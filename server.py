@@ -18,7 +18,7 @@ AWARDS=[
 ]
 ROOM={"phase":"lobby","q":-1,"reveal":False,"players":{},"votes":{},"award_q":0}
 def pub():
- return {"phase":ROOM["phase"],"q":ROOM["q"],"reveal":ROOM["reveal"],"players":{n:{"score":p["score"],"answered":p["answer"] is not None} for n,p in ROOM["players"].items()},"votes":ROOM["votes"],"award_q":ROOM["award_q"]}
+ return {"phase":ROOM["phase"],"q":ROOM["q"],"reveal":ROOM["reveal"],"players":{n:{"score":p["score"],"answered":p["answer"] is not None,"answer":p["answer"],"last_seen":p.get("last_seen",0)} for n,p in ROOM["players"].items()},"votes":ROOM["votes"],"award_q":ROOM["award_q"]}
 @app.get("/")
 def index(): return send_from_directory("static","index.html")
 @app.get("/api/state")
@@ -29,17 +29,24 @@ def questions(): return jsonify(questions=QUESTIONS,awards=AWARDS)
 def join():
  n=(request.json or {}).get("name","").strip()
  if not n or len(n)>12:return jsonify(error="이름을 확인해주세요."),400
- ROOM["players"].setdefault(n,{"score":0,"answer":None}); return jsonify(ok=True)
+ ROOM["players"].setdefault(n,{"score":0,"answer":None,"last_seen":0}); return jsonify(ok=True)
 @app.post("/api/admin/start")
 def start():
  ROOM.update({"phase":"quiz","q":0,"reveal":False,"award_q":0})
  for p in ROOM["players"].values():p["answer"]=None
  return jsonify(ok=True)
+@app.post("/api/heartbeat")
+def heartbeat():
+    import time
+    n=(request.json or {}).get("name")
+    if n in ROOM["players"]: ROOM["players"][n]["last_seen"]=time.time()
+    return jsonify(ok=True)
+
 @app.post("/api/answer")
 def answer():
  d=request.json or {};n=d.get("name");a=d.get("answer")
  if n not in ROOM["players"] or ROOM["phase"]!="quiz" or ROOM["reveal"]:return jsonify(error="현재 답변할 수 없습니다."),400
- ROOM["players"][n]["answer"]=a;return jsonify(ok=True)
+ ROOM["players"][n]["answer"]=a\nimport time\nROOM["players"][n]["last_seen"]=time.time()\nreturn jsonify(ok=True)
 @app.post("/api/admin/reveal")
 def reveal():
  c=QUESTIONS[ROOM["q"]]["correct"]
