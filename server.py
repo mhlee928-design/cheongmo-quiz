@@ -46,7 +46,10 @@ def heartbeat():
 def answer():
  d=request.json or {};n=d.get("name");a=d.get("answer")
  if n not in ROOM["players"] or ROOM["phase"]!="quiz" or ROOM["reveal"]:return jsonify(error="현재 답변할 수 없습니다."),400
- ROOM["players"][n]["answer"]=a\nimport time\nROOM["players"][n]["last_seen"]=time.time()\nreturn jsonify(ok=True)
+ ROOM["players"][n]["answer"]=a
+ import time
+ ROOM["players"][n]["last_seen"]=time.time()
+ return jsonify(ok=True)
 @app.post("/api/admin/reveal")
 def reveal():
  c=QUESTIONS[ROOM["q"]]["correct"]
