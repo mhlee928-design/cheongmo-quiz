@@ -17,7 +17,7 @@ input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);borde
 @media(max-width:600px){.answers,.grid,.monitor{grid-template-columns:1fr}.card{padding:20px}.answer-row{grid-template-columns:35px 1fr 62px}}
 </style></head><body><div class="wrap">
 
-<section id="home" class="card center"><div class="big">💕</div><h1>지원 ♥ 지현<br>같이놀자 청모 QUIZ</h1><p>신랑신부 QUIZ + 같이놀자 AWARDS</p>
+<section id="home" class="card center"><div class="big">💕</div><h1>지원 ♥ 지현<br>같이놀자 청모 QUIZ</h1><p>지지커플 QUIZ + 지현지원 청모 AWARDS</p>
 <button class="btn" onclick="show('join')">참여하기</button> <button class="btn gray" onclick="show('login')">진행자</button></section>
 
 <section id="join" class="card hidden"><h2>👋 이름을 입력해주세요</h2><input id="name" maxlength="12" placeholder="예: 소희"><button class="btn" onclick="join()">입장하기</button></section>
@@ -25,9 +25,9 @@ input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);borde
 
 <section id="quiz" class="card hidden"><div class="top"><span id="qn" class="badge"></span><span id="sc" class="badge"></span></div><h2 id="qt"></h2><div id="ans" class="answers"></div><p id="msg" class="center"></p><div id="detail" class="detail hidden"></div></section>
 
-<section id="awards" class="card hidden"><span class="badge">💕 같이놀자 AWARDS</span><div class="top"><h2 id="aqt"></h2><span id="an" class="badge"></span></div><div id="ava" class="answers"></div><p id="am" class="center"></p><div id="awardPlayerResult" class="resultbox hidden"></div></section>
+<section id="awards" class="card hidden"><span class="badge">💕 지현지원 청모 AWARDS</span><div class="top"><h2 id="aqt"></h2><span id="an" class="badge"></span></div><div id="ava" class="answers"></div><p id="am" class="center"></p><div id="awardPlayerResult" class="resultbox hidden"></div></section>
 
-<section id="final" class="card center hidden"><div class="big">🏆</div><h1>같이놀자 AWARDS</h1><div id="fr"></div><hr><h2>신랑신부 QUIZ 최종 순위</h2><div id="rank"></div></section>
+<section id="final" class="card center hidden"><div class="big">🏆</div><h1>지현지원 청모 AWARDS</h1><div id="fr"></div><hr><h2>지지커플 QUIZ 최종 순위</h2><div id="rank"></div></section>
 
 <section id="login" class="card hidden"><h2>🎤 진행자 입장</h2><input id="pw" type="password" placeholder="관리자 비밀번호"><button class="btn" onclick="admin()">입장</button></section>
 
@@ -50,9 +50,9 @@ input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);borde
 <div class="tabs"><button id="tabGame" class="tab active" onclick="openSettings('game')">✏️ 문제 / AWARDS 편집</button><button id="tabGuide" class="tab" onclick="openSettings('guide')">ℹ️ 사용방법</button></div>
 <div id="settingsGame">
 <div class="notice">게임 시작 전 <b>문제, 보기, 정답, 해설, AWARDS 질문</b>을 직접 수정할 수 있습니다. 수정 후 <b>저장</b>하세요. 게임이 시작되면 편집할 수 없습니다.</div>
-<div class="top"><h3>📝 신랑신부 QUIZ</h3><button class="btn" onclick="addQuestion()">+ 문제 추가</button></div>
+<div class="top"><h3>📝 지지커플 QUIZ</h3><button class="btn" onclick="addQuestion()">+ 문제 추가</button></div>
 <div id="qEditor"></div>
-<div class="top"><h3>💕 같이놀자 AWARDS</h3><button class="btn" onclick="addAward()">+ 질문 추가</button></div>
+<div class="top"><h3>💕 지현지원 청모 AWARDS</h3><button class="btn" onclick="addAward()">+ 질문 추가</button></div>
 <div id="aEditor"></div>
 <button class="btn" onclick="saveSettings()">💾 수정 내용 저장</button>
 </div>
