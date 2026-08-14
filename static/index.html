@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>같이놀자 청모 QUIZ</title>
+<title>지지커플 QUIZ · 지현지원 청모 AWARDS</title>
 <style>
 :root{--p:#e88fa5;--bg:#fff9f6;--line:#eadbd7;--dark:#3b3432;--green:#4b9567;--yellow:#b77b25;--red:#a85b68}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:var(--dark)}
@@ -12,8 +12,7 @@ input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);borde
 .detail{background:#fff5f2;border-radius:14px;padding:14px;margin-top:14px}.row{padding:9px 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .monitor{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}.person{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}.ok{color:var(--green)}.waitc{color:var(--yellow)}.off{color:var(--red)}
 .preview{background:#fffaf8;border:2px dashed var(--line);border-radius:18px;padding:18px;margin:16px 0}.preview .pvq{font-weight:800;font-size:18px;margin:10px 0}.preview .pva{display:grid;grid-template-columns:1fr 1fr;gap:8px}.preview .pva span{border:1px solid var(--line);border-radius:10px;padding:9px;background:#fff}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab{padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-weight:800}.tab.active{background:#fff0f4;color:#b55370;border-color:#efb5c4}
-.editor{border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;background:#fffdfc}.editor h4{margin:0 0 10px}.answer-row{display:grid;grid-template-columns:42px 1fr 70px;gap:8px;align-items:center;margin:6px 0}.answer-row label{font-weight:800;text-align:center}.answer-row input{margin:0}.award-editor{display:grid;grid-template-columns:50px 1fr;gap:8px;align-items:start;margin:8px 0}.award-editor input{margin:0}.notice{background:#fff5f2;border-radius:12px;padding:11px;margin:10px 0;font-size:14px}.resultbox{background:#fff7f3;border-radius:18px;padding:18px;text-align:center}.winner{font-size:28px;font-weight:900;margin:8px 0}.bar{height:9px;background:#eee1dc;border-radius:99px;overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:var(--p)}
+.notice{background:#fff5f2;border-radius:12px;padding:11px;margin:10px 0;font-size:14px}.resultbox{background:#fff7f3;border-radius:18px;padding:18px;text-align:center}.winner{font-size:28px;font-weight:900;margin:8px 0}.bar{height:9px;background:#eee1dc;border-radius:99px;overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:var(--p)}
 @media(max-width:600px){.answers,.grid,.monitor{grid-template-columns:1fr}.card{padding:20px}.answer-row{grid-template-columns:35px 1fr 62px}}
 .final-title{font-size:1.5em;margin:18px 0 12px}</style></head><body><div class="wrap">
 
@@ -49,27 +48,17 @@ input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);borde
 </div>
 <h3>💕 현재 AWARDS 결과</h3><div id="ar"></div>
 
-<div class="tabs"><button id="tabGame" class="tab active" onclick="openSettings('game')">✏️ 문제 / AWARDS 편집</button><button id="tabGuide" class="tab" onclick="openSettings('guide')">ℹ️ 사용방법</button></div>
-<div id="settingsGame">
-<div class="notice">게임 시작 전 <b>문제, 보기, 정답, 해설, AWARDS 질문</b>을 직접 수정할 수 있습니다. 수정 후 <b>저장</b>하세요. 게임이 시작되면 편집할 수 없습니다.</div>
-<div class="top"><h3>📝 지지커플 QUIZ</h3><button class="btn" onclick="addQuestion()">+ 문제 추가</button></div>
-<div id="qEditor"></div>
-<div class="top"><h3>💕 지현지원 청모 AWARDS</h3><button class="btn" onclick="addAward()">+ 질문 추가</button></div>
-<div id="aEditor"></div>
-<button class="btn" onclick="saveSettings()">💾 수정 내용 저장</button>
-</div>
-<div id="settingsGuide" class="hidden"><div class="notice"><b>퀴즈:</b> 모두가 같은 문제를 보고 → 답변 → 진행자가 정답 공개 → 다음 문제.<br><br><b>AWARDS:</b> 모두가 투표 → 진행자가 <b>AWARDS 결과 공개</b> → 1위 확인 → <b>다음 어워즈</b>를 눌러 다음 질문으로 이동합니다.<br><br><b>참가자 화면:</b> 진행자가 다음 버튼을 누르면 모든 참가자의 화면이 동시에 이동합니다.</div></div>
 </section>
 </div>
 
 <script>
-let me=localStorage.getItem("cm_name")||"",qs=[],aws=[],lastAwardIndex=-1;
+let me="",qs=[],aws=[],lastAwardIndex=-1;
 const $=x=>document.getElementById(x);
 function show(x){document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));$(x).classList.remove("hidden")}
 async function api(u,m="GET",b){let r=await fetch(u,{method:m,headers:{"Content-Type":"application/json"},body:b?JSON.stringify(b):undefined});let j=await r.json();if(!r.ok)throw Error(j.error||"오류");return j}
 async function init(){let j=await api("/api/questions");qs=j.questions;aws=j.awards}
 async function join(){let n=$("name").value.trim();if(!n)return alert("이름을 입력해주세요.");try{await api("/api/join","POST",{name:n});me=n;$("wel").textContent=n+"님, 입장 완료!";show("wait")}catch(e){alert(e.message)}}
-function admin(){if($("pw").value==="1234"){show("admin");renderEditors()}else alert("비밀번호가 맞지 않습니다.")}
+function admin(){if($("pw").value==="1234"){show("admin")}else alert("비밀번호가 맞지 않습니다.")}
 async function answer(i){try{await api("/api/answer","POST",{name:me,answer:i})}catch(e){alert(e.message)}}
 async function award(n){try{await api("/api/award","POST",{voter:me,selected:n});/* 상태는 다음 실시간 state에서 갱신 */}catch(e){alert(e.message)}}
 async function go(u,m){try{await api(u,m)}catch(e){alert(e.message)}}
@@ -151,46 +140,11 @@ function renderAwardSummary(s){
  }else $("ar").innerHTML="";
 }
 
-function renderEditors(){
- const disabled = false;
- $("qEditor").innerHTML=qs.map((q,i)=>`
- <div class="editor" id="qe${i}"><h4>Q${i+1}</h4>
- <label>문제</label><textarea class="qtext">${esc(q.text)}</textarea>
- <div class="answer-row"><label>①</label><input class="qa" value="${esc(q.answers[0]||"")}"><select class="qc">${[0,1,2,3].map(n=>`<option value="${n}" ${q.correct===n?"selected":""}>${n===0?"①":n===1?"②":n===2?"③":"④"} 정답</option>`).join("")}</select></div>
- <div class="answer-row"><label>②</label><input class="qa" value="${esc(q.answers[1]||"")}"><span></span></div>
- <div class="answer-row"><label>③</label><input class="qa" value="${esc(q.answers[2]||"")}"><span></span></div>
- <div class="answer-row"><label>④</label><input class="qa" value="${esc(q.answers[3]||"")}"><span></span></div>
- <label>정답 해설</label><textarea class="qdetail">${esc(q.detail||"")}</textarea>
- <button class="btn gray" onclick="removeQuestion(${i})">이 문제 삭제</button></div>`).join("");
- $("aEditor").innerHTML=aws.map((a,i)=>`<div class="editor award-editor"><b>Q${i+1}</b><input class="atext" value="${esc(a)}"><button class="btn gray" onclick="removeAward(${i})">삭제</button></div>`).join("");
-}
-function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
-function addQuestion(){qs.push({text:"새 문제",answers:["보기 1","보기 2","보기 3","보기 4"],correct:0,detail:""});renderEditors()}
-function removeQuestion(i){if(qs.length<=1)return alert("문제는 최소 1개가 필요합니다.");qs.splice(i,1);renderEditors()}
-function addAward(){aws.push("새로운 AWARDS 질문");renderEditors()}
-function removeAward(i){if(aws.length<=1)return alert("AWARDS는 최소 1개가 필요합니다.");aws.splice(i,1);renderEditors()}
-async function saveSettings(){
- try{
-  const cards=[...document.querySelectorAll(".editor[id^='qe']")];
-  const nq=cards.map(card=>{
-   const inputs=card.querySelectorAll(".qa"), sel=card.querySelector(".qc");
-   return {text:card.querySelector(".qtext").value,answers:[...inputs].map(x=>x.value),correct:Number(sel.value),detail:card.querySelector(".qdetail").value};
-  });
-  const na=[...document.querySelectorAll(".atext")].map(x=>x.value);
-  const j=await api("/api/admin/config","POST",{questions:nq,awards:na});
-  qs=j.questions;aws=j.awards;renderEditors();alert("수정 내용이 저장되었습니다!");
- }catch(e){alert(e.message)}
-}
-function openSettings(which){
- $("settingsGame").classList.toggle("hidden",which!=="game");$("settingsGuide").classList.toggle("hidden",which!=="guide");
- $("tabGame").classList.toggle("active",which==="game");$("tabGuide").classList.toggle("active",which==="guide");
-}
 async function finalAdmin(){let s=await api("/api/state"),r=await api("/api/admin/award-results");finalHTML(s,r)}
 function finalHTML(s,r){let arr=Object.entries(s.players).sort((a,b)=>b[1].score-a[1].score);$("fr").innerHTML=r.results.map((c,i)=>{let a=Object.entries(c).sort((x,y)=>y[1]-x[1])[0];return a?`<p>Q${i+1} · 🏆 ${a[0]} (${a[1]}표)</p>`:""}).join("");$("rank").innerHTML=arr.map((x,i)=>`<h2>${["🥇","🥈","🥉"][i]||"🏅"} ${x[0]} — ${x[1]}점</h2>`).join("");show("final")}
 async function reset(){if(!confirm("참가자와 점수, 투표 결과를 모두 초기화할까요?"))return;try{await api("/api/admin/reset","POST");qs=(await api("/api/questions")).questions;aws=(await api("/api/questions")).awards;renderEditors()}catch(e){alert(e.message)}}
 function home(){
   me="";
-  try{localStorage.removeItem("cm_name")}catch(e){}
   show("home");
 }
 async function poll(){try{if(me)await api("/api/heartbeat","POST",{name:me});let s=await api("/api/state");if(!$("admin").classList.contains("hidden"))adminRender(s);else player(s)}catch(e){}}

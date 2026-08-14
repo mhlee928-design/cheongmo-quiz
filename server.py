@@ -4,17 +4,17 @@ from flask import Flask, request, jsonify, send_from_directory
 app = Flask(__name__, static_folder="static")
 
 QUESTIONS = [
-    {"text":"두 사람의 키 차이는?","answers":["15cm","18cm","16cm","17cm"],"correct":1,"detail":"신랑 179cm / 신부 161cm"},
-    {"text":"두 사람이 사귄 날은? 2월 며칠일까요?","answers":["6일","7일","8일","9일"],"correct":1,"detail":"2월 7일"},
-    {"text":"두 사람이 둘이서 처음 본 영화는?","answers":["아메바 소녀들과 학교괴담: 개교기념일","수퍼소닉 3","무파사","모아나 2"],"correct":2,"detail":"무파사"},
-    {"text":"두 사람 카톡에서 더 횟수가 많은 단어는?","answers":["지원(이)","오빠"],"correct":0,"detail":"지원(이) 1871회 / 오빠 1081회 · 횟수는 나중에 수정 가능"},
-    {"text":"두 사람의 결혼식 날짜는 10월 3일 토요일입니다. 시간은?","answers":["13:30","15:00","16:00","16:30"],"correct":1,"detail":"10월 3일 토요일 15:00 · 기억해주세요!"},
+    {"text":"지현,지원의 키 차이는?","answers":["16cm","17cm","18cm","19cm"],"correct":2,"detail":"지현 179cm / 지원 161cm"},
+    {"text":"두 사람의 사귄 날은 몇월일까요?","answers":["24년 12월","25년 1월","25년 2월","25년 3월"],"correct":2,"detail":""},
+    {"text":"두 사람이 둘이서 처음 본 영화는?","answers":["소녀들과 학교괴담: 개교기념일","수퍼소닉 3","모아나 2","무파사: 라이온 킹"],"correct":3,"detail":""},
+    {"text":"두 사람의 카톡방에서 말한 횟수가 더 많은 단어는?","answers":["지원이","오빠"],"correct":0,"detail":"지원이 1871회 / 오빠 1218회 (2026.08.13. 기준)"},
+    {"text":"지지커플의 결혼식 날짜는 10월 3일 토요일입니다. 시간은?","answers":["14:30","15:00","16:00","16:30"],"correct":1,"detail":"10월 3일 토요일 15:00 · 기억해주세요!"},
 ]
 AWARDS = [
-    "신랑신부의 결혼 소식을 듣고 가장 놀랐을 것 같은 사람?",
-    "결혼식 날 제일 먼저 울 것 같은 사람?",
-    "결혼식에서 신랑신부보다 사진을 더 많이 찍을 것 같은 사람?",
+    "결혼식에서 가장 먼저 신랑신부를 놀릴 것 같은 사람?",
+    "결혼식 날 제일 '먼저' 울 것 같은 사람?",
     "결혼식 끝나고 제일 먼저 \"우리 2차 어디야?\" 할 것 같은 사람?",
+    "식장에 포토부스(웨딩네컷사진기)가 있는데, 포토부스 사진첩에 가장 많이 등장할 것 같은 사람?",
     "신랑신부에게 결혼생활 조언을 제일 많이 할 것 같은 사람?",
 ]
 
@@ -44,36 +44,6 @@ def state():
 @app.get("/api/questions")
 def questions():
     return jsonify(questions=QUESTIONS, awards=AWARDS)
-
-@app.post("/api/admin/config")
-def save_config():
-    # This is a one-event admin app; settings live for the current server session.
-    if ROOM["phase"] != "lobby":
-        return jsonify(error="게임이 시작된 후에는 문제를 수정할 수 없습니다. 초기화 후 수정해주세요."), 400
-    d = request.json or {}
-    new_q = d.get("questions")
-    new_awards = d.get("awards")
-    if not isinstance(new_q, list) or len(new_q) < 1:
-        return jsonify(error="퀴즈 문제를 확인해주세요."), 400
-    clean_q=[]
-    for q in new_q:
-        text=str(q.get("text","")).strip()
-        answers=q.get("answers",[])
-        detail=str(q.get("detail","")).strip()
-        correct=q.get("correct")
-        if not text or not isinstance(answers,list) or not 2 <= len(answers) <= 4:
-            return jsonify(error="각 퀴즈는 문제와 2~4개의 보기가 필요합니다."),400
-        answers=[str(x).strip() for x in answers]
-        while answers and answers[-1]=="":
-            answers.pop()
-        if len(answers)<2 or any(not x for x in answers) or not isinstance(correct,int) or not 0 <= correct < len(answers):
-            return jsonify(error="정답 번호와 보기 내용을 확인해주세요."),400
-        clean_q.append({"text":text,"answers":answers,"correct":correct,"detail":detail})
-    if not isinstance(new_awards,list) or len(new_awards)<1 or any(not str(x).strip() for x in new_awards):
-        return jsonify(error="AWARDS 질문을 확인해주세요."),400
-    QUESTIONS[:] = clean_q
-    AWARDS[:] = [str(x).strip() for x in new_awards]
-    return jsonify(ok=True, questions=QUESTIONS, awards=AWARDS)
 
 @app.post("/api/join")
 def join():
