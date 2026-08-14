@@ -4,15 +4,40 @@ from flask import Flask, request, jsonify, send_from_directory
 app = Flask(__name__, static_folder="static")
 
 QUESTIONS = [
+  {"text":"지현의 말투가 아닌 것은?","answers":["나빴네!","니 뜨겁나!","우리 형이 짱이지!","맞지맞지 사실인걸?"],"correct":1,"detail":"② '니 뜨겁나!'는 한 적이 없습니다..."},
+    
+    {"text":"지원의 MBTI는?","answers":["ESFJ","ISTJ","ISFJ","ESTJ"],"correct":0,"detail":"① ESFJ · 나 T 아니야"},
+    
     {"text":"지현,지원의 키 차이는?","answers":["16cm","17cm","18cm","19cm"],"correct":2,"detail":"지현 179cm / 지원 161cm"},
+    
     {"text":"두 사람의 사귄 날은 몇월일까요?","answers":["24년 12월","25년 1월","25년 2월","25년 3월"],"correct":2,"detail":""},
+    
     {"text":"두 사람이 둘이서 처음 본 영화는?","answers":["소녀들과 학교괴담: 개교기념일","수퍼소닉 3","모아나 2","무파사: 라이온 킹"],"correct":3,"detail":""},
+    
     {"text":"두 사람의 카톡방에서 말한 횟수가 더 많은 단어는?","answers":["지원이","오빠"],"correct":0,"detail":"지원이 1871회 / 오빠 1218회 (2026.08.13. 기준)"},
+    
+    {"text":"지현이가 지원이에게 가장 많이 듣는 말은?","answers":["오늘 뭐 먹을래","그럴 수 있지","집에 안가니","나 챗지피티 아니야"],"correct":3,"detail":""},
+    
+    {"text":"만약 지현,지원의 2세가 생긴다면 나올 수 없는 혈액형은?","answers":["O","A","B","AB"],"correct":0,"detail":"지현 AB / 지원 A"},
+    
     {"text":"지지커플의 결혼식 날짜는 10월 3일 토요일입니다. 시간은?","answers":["14:30","15:00","16:00","16:30"],"correct":1,"detail":"10월 3일 토요일 15:00 · 기억해주세요!"},
+    
+{
+    "text":"신랑신부에게 가장 어울리는 한마디?",
+    "answers":[
+        "평생 행복하게 살아라",
+        "싸우지 말고 잘 살아라",
+        "둘이 알아서 잘하겠지",
+        "결혼해도 같이놀자"
+    ],
+    "correct":-1,
+    "detail":"①~④ 모두 정답! 여러분의 마음이 모두 정답입니다 💕"
+},
 ]
+
 AWARDS = [
     "결혼식에서 가장 먼저 신랑신부를 놀릴 것 같은 사람?",
-    "결혼식 날 제일 '먼저' 울 것 같은 사람?",
+    "결혼식 날 제일 먼저 도착할 것 같은 사람?",
     "결혼식 끝나고 제일 먼저 \"우리 2차 어디야?\" 할 것 같은 사람?",
     "식장에 포토부스(웨딩네컷사진기)가 있는데, 포토부스 사진첩에 가장 많이 등장할 것 같은 사람?",
     "신랑신부에게 결혼생활 조언을 제일 많이 할 것 같은 사람?",
@@ -86,10 +111,10 @@ def answer():
 def reveal():
     if ROOM["phase"]!="quiz" or ROOM["reveal"]:
         return jsonify(error="정답을 공개할 수 없습니다."),400
-    c=QUESTIONS[ROOM["q"]]["correct"]
-    for p in ROOM["players"].values():
-        if p["answer"]==c:
-            p["score"]+=1
+c=QUESTIONS[ROOM["q"]]["correct"]
+for p in ROOM["players"].values():
+    if c == -1 or p["answer"] == c:
+        p["score"] += 1
     ROOM["reveal"]=True
     return jsonify(ok=True,correct=c)
 
