@@ -140,8 +140,50 @@ function renderAwardSummary(s){
  }else $("ar").innerHTML="";
 }
 
-async function finalAdmin(){let s=await api("/api/state"),r=await api("/api/admin/award-results");finalHTML(s,r)}
-function finalHTML(s,r){let arr=Object.entries(s.players).sort((a,b)=>b[1].score-a[1].score);$("fr").innerHTML=r.results.map((c,i)=>{let a=Object.entries(c).sort((x,y)=>y[1]-x[1])[0];return a?`<p>Q${i+1} · 🏆 ${a[0]} (${a[1]}표)</p>`:""}).join("");$("rank").innerHTML=arr.map((x,i)=>`<h2>${["🥇","🥈","🥉"][i]||"🏅"} ${x[0]} — ${x[1]}점</h2>`).join("");show("final")}
+async function finalAdmin(){
+  await api("/api/admin/final","POST");
+  let s=await api("/api/state");
+  let r=await api("/api/admin/award-results");
+  finalHTML(s,r);
+}
+
+async function final(s){
+  let r=await api("/api/admin/award-results");
+  finalHTML(s,r);
+}
+
+function finalHTML(s,r){
+
+  // QUIZ 점수 순위
+  let arr = Object.entries(s.players)
+    .sort((a,b)=>
+      Number(b[1]?.score ?? 0) - Number(a[1]?.score ?? 0)
+    );
+
+  $("rank").innerHTML = arr.map((x,i)=>{
+    const score = Number(x[1]?.score ?? 0);
+    return `
+      <h2>
+        ${["🥇","🥈","🥉"][i] || "🏅"}
+        ${x[0]} — ${score}점
+      </h2>
+    `;
+  }).join("");
+
+  // AWARDS 결과
+  $("fr").innerHTML = r.results.map((c,i)=>{
+
+    let a = Object.entries(c)
+      .sort((x,y)=>Number(y[1]) - Number(x[1]))[0];
+
+    return a
+      ? `<p>Q${i+1} · 🏆 ${a[0]} (${Number(a[1])}표)</p>`
+      : "";
+      
+  }).join("");
+
+  show("final");
+}
 async function reset(){if(!confirm("참가자와 점수, 투표 결과를 모두 초기화할까요?"))return;try{await api("/api/admin/reset","POST");qs=(await api("/api/questions")).questions;aws=(await api("/api/questions")).awards;renderEditors()}catch(e){alert(e.message)}}
 function home(){
   me="";

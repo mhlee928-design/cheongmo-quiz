@@ -134,6 +134,14 @@ def award_next():
         ROOM["award_reveal"]=False
     return jsonify(ok=True)
 
+@app.post("/api/admin/final")
+def final_result():
+    if ROOM["phase"] not in ("awards", "final"):
+        return jsonify(error="최종 결과를 공개할 수 없습니다."),400
+
+    ROOM["phase"] = "final"
+    return jsonify(ok=True)
+
 @app.get("/api/admin/award-results")
 def results():
     out=[]
