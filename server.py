@@ -18,7 +18,7 @@ QUESTIONS = [
     
     {"text":"지현이가 지원이에게 가장 많이 듣는 말은?","answers":["오늘 뭐 먹을래","그럴 수 있지","집에 안가니","나 챗지피티 아니야"],"correct":3,"detail":""},
     
-    {"text":"만약 지현,지원의 2세가 생긴다면 나올 수 없는 혈액형은?","answers":["O","A","B","AB"],"correct":0,"detail":"지현 AB / 지원 AO"},
+    {"text":"만약 지현,지원의 2세가 생긴다면 나올 수 없는 혈액형은?","answers":["O","A","B","AB"],"correct":0,"detail":"지현 AB / 지원 A"},
     
     {"text":"지지커플의 결혼식 날짜는 10월 3일 토요일입니다. 시간은?","answers":["14:30","15:00","16:00","16:30"],"correct":1,"detail":"10월 3일 토요일 15:00 · 기억해주세요!"},
     
@@ -37,7 +37,7 @@ QUESTIONS = [
 
 AWARDS = [
     "결혼식에서 가장 먼저 신랑신부를 놀릴 것 같은 사람?",
-    "결혼식 날 제일 먼저 도착할 것 같은 사람?",
+    "결혼식 날 제일 '먼저' 울 것 같은 사람?",
     "결혼식 끝나고 제일 먼저 \"우리 2차 어디야?\" 할 것 같은 사람?",
     "식장에 포토부스(웨딩네컷사진기)가 있는데, 포토부스 사진첩에 가장 많이 등장할 것 같은 사람?",
     "신랑신부에게 결혼생활 조언을 제일 많이 할 것 같은 사람?",
@@ -126,11 +126,21 @@ def nextq():
     if ROOM["phase"]!="quiz" or not ROOM["reveal"]:
         return jsonify(error="먼저 정답을 공개해주세요."),400
     if ROOM["q"] >= len(QUESTIONS)-1:
-        ROOM["phase"]="awards"; ROOM["award_q"]=0; ROOM["award_reveal"]=False
+        ROOM["phase"]="quiz_final"
+        ROOM["reveal"]=False
     else:
         ROOM["q"]+=1; ROOM["reveal"]=False
     for p in ROOM["players"].values():
         p["answer"]=None
+    return jsonify(ok=True)
+
+@app.post("/api/admin/start-awards")
+def start_awards():
+    if ROOM["phase"] != "quiz_final":
+        return jsonify(error="QUIZ 최종 결과 화면에서만 AWARDS를 시작할 수 있습니다."),400
+    ROOM["phase"]="awards"
+    ROOM["award_q"]=0
+    ROOM["award_reveal"]=False
     return jsonify(ok=True)
 
 @app.post("/api/award")
