@@ -111,10 +111,13 @@ def answer():
 def reveal():
     if ROOM["phase"]!="quiz" or ROOM["reveal"]:
         return jsonify(error="정답을 공개할 수 없습니다."),400
-c=QUESTIONS[ROOM["q"]]["correct"]
-for p in ROOM["players"].values():
-    if c == -1 or p["answer"] == c:
-        p["score"] += 1
+
+    c=QUESTIONS[ROOM["q"]]["correct"]
+
+    for p in ROOM["players"].values():
+        if c == -1 or p["answer"] == c:
+            p["score"] += 1
+
     ROOM["reveal"]=True
     return jsonify(ok=True,correct=c)
 
