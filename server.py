@@ -4,9 +4,9 @@ from flask import Flask, request, jsonify, send_from_directory
 app = Flask(__name__, static_folder="static")
 
 QUESTIONS = [
-  {"text":"지현의 말투가 아닌 것은?","answers":["나빴네!","니 뜨겁나!","우리 형이 짱이지!","맞지맞지 사실인걸?"],"correct":1,"detail":"② '니 뜨겁나!'는 한 적이 없습니다..."},
+  {"text":"지현의 말투가 아닌 것은?","answers":["나빴네!","니 뜨겁나!","우리 형이 짱이지!","맞지맞지 사실인걸?"],"correct":1,"detail":"'니 뜨겁나!'는 한 적이 없습니다..."},
     
-    {"text":"지원의 MBTI는?","answers":["ESFJ","ISTJ","ISFJ","ESTJ"],"correct":0,"detail":"① ESFJ · 나 T 아니야"},
+    {"text":"지원의 MBTI는?","answers":["ESFJ","ISTJ","ISFJ","ESTJ"],"correct":0,"detail":"나 T 아니야"},
     
     {"text":"지현,지원의 키 차이는?","answers":["16cm","17cm","18cm","19cm"],"correct":2,"detail":"지현 179cm / 지원 161cm"},
     
@@ -18,7 +18,7 @@ QUESTIONS = [
     
     {"text":"지현이가 지원이에게 가장 많이 듣는 말은?","answers":["오늘 뭐 먹을래","그럴 수 있지","집에 안가니","나 챗지피티 아니야"],"correct":3,"detail":""},
     
-    {"text":"만약 지현,지원의 2세가 생긴다면 나올 수 없는 혈액형은?","answers":["O","A","B","AB"],"correct":0,"detail":"지현 AB / 지원 A"},
+    {"text":"만약 지현,지원의 2세가 생긴다면 나올 수 없는 혈액형은?","answers":["O","A","B","AB"],"correct":0,"detail":"지현 AB / 지원 AO"},
     
     {"text":"지지커플의 결혼식 날짜는 10월 3일 토요일입니다. 시간은?","answers":["14:30","15:00","16:00","16:30"],"correct":1,"detail":"10월 3일 토요일 15:00 · 기억해주세요!"},
     

@@ -68,8 +68,8 @@ function player(s){
  if(s.phase==="lobby"){lastAwardIndex=-1;show("wait");return}
  if(s.phase==="quiz"){lastAwardIndex=-1;
   show("quiz");let q=qs[s.q],p=s.players[me];$("qn").textContent=`${s.q+1} / ${qs.length}`;$("sc").textContent=(p?.score||0)+"점";$("qt").textContent=q.text;
-  $("ans").innerHTML=q.answers.map((a,i)=>`<button class="ans ${p?.answer===i?"sel":""}" ${p?.answered||s.reveal?"disabled":""} onclick="answer(${i})">${["①","②","③","④"][i]} ${a}</button>`).join("");
-  $("msg").textContent=s.reveal?"정답 공개!":p?.answered?"답변 완료!":"선택해주세요.";
+  $("ans").innerHTML=q.answers.map((a,i)=>`<button class="ans ${p?.answer===i?"sel":""}" ${s.reveal?"disabled":""} onclick="answer(${i})">${["①","②","③","④"][i]} ${a}</button>`).join("");
+  $("msg").textContent=s.reveal?"정답 공개!":p?.answered?"답변 완료! 현재 선택한 답을 다시 눌러 변경할 수 있습니다.":"선택해주세요.";
   if(s.reveal){$("detail").classList.remove("hidden");$("detail").innerHTML="<b>정답</b> · "+q.answers[q.correct]+"<br>"+q.detail}else $("detail").classList.add("hidden");
  }else if(s.phase==="awards"){
   show("awards");let i=s.award_q;
@@ -177,7 +177,7 @@ function finalHTML(s,r){
       .sort((x,y)=>Number(y[1]) - Number(x[1]))[0];
 
     return a
-      ? `<p>Q${i+1} · 🏆 ${a[0]} (${Number(a[1])}표)</p>`
+      ? `<p>💕 ${aws[i]}<br>🏆 ${a[0]} (${Number(a[1])}표)</p>`
       : "";
       
   }).join("");
