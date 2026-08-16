@@ -89,8 +89,8 @@ function player(s){
     renderPlayerAwardResult(s,i);
   }else{
     $("awardPlayerResult").classList.add("hidden");
-    $("ava").innerHTML=Object.keys(s.players).map(n=>`<button class="ans ${voted&&s.votes[myKey]===n?"sel":""}" ${voted?"disabled":""} onclick='award(${JSON.stringify(n)})'>${n}</button>`).join("");
-    $("am").textContent=voted?"투표 완료! 결과 공개를 기다려주세요.":"한 명을 선택해주세요.";
+    $("ava").innerHTML=Object.keys(s.players).map(n=>`<button class="ans ${voted&&s.votes[myKey]===n?"sel":""}" ${s.award_reveal?"disabled":""} onclick='award(${JSON.stringify(n)})'>${n}</button>`).join("");
+    $("am").textContent=s.award_reveal?"결과 공개!":voted?"현재 선택한 사람을 다시 선택하거나 다른 사람으로 변경할 수 있습니다.":"한 명을 선택해주세요.";
   }
  }else if(s.phase==="quiz_final"){
   lastAwardIndex=-1;showQuizFinal(s);
