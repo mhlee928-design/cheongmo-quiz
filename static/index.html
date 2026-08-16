@@ -114,14 +114,14 @@ function renderPlayerAwardResult(s,i){
 }
 
 function adminRender(s){
- const e=Object.entries(s.players),now=Date.now()/1000,online=e.filter(([n,p])=>p.last_seen&&now-p.last_seen<10).length;
+ const e=Object.entries(s.players),now=Date.now()/1000,online=e.length;
  const answered=e.filter(([n,p])=>p.answered).length;
  $("ast").textContent=s.phase;$("pc").textContent=e.length;$("liveCount").textContent=`온라인 ${online}/${e.length} · 응답 ${answered}/${e.length}`;
  $("players").innerHTML=e.map(([n])=>`<span class="pill">${n}</span>`).join("")||"없음";
  $("responses").innerHTML=e.filter(([n,p])=>p.answered).map(([n])=>`<span class="pill">${n} ✓</span>`).join("")||"아직 없음";
  $("scores").innerHTML=e.sort((a,b)=>b[1].score-a[1].score).map(([n,p],i)=>`<div class="row"><span>${i+1}. ${n}</span><b>${p.score}점</b></div>`).join("");
  $("monitor").innerHTML=e.map(([n,p])=>{
-   const on=p.last_seen&&now-p.last_seen<10;
+   const on=true;
    let text=s.phase==="quiz"?`Q${s.q+1} · ${p.answered?"답변 완료":"미응답"}`:s.phase==="awards"?`AWARDS Q${s.award_q+1}`:s.phase==="quiz_final"?"QUIZ 결과":s.phase==="final"?"최종 결과":"대기 화면";
    if(s.phase==="awards"){const v=Object.prototype.hasOwnProperty.call(s.votes,`${s.award_q}|${n}`);text+=s.award_reveal?" · 결과 공개":" · "+(v?"투표 완료":"투표 중")}
    const cls=on?(p.answered||s.phase!=="quiz"?"ok":"waitc"):"off";
