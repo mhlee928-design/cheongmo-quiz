@@ -17,7 +17,7 @@ input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);borde
 .final-title{font-size:1.5em;margin:18px 0 12px}</style></head><body><div class="wrap">
 
 <section id="home" class="card center"><div class="big">💕</div><h1>지원 ♥ 지현<br>같이놀자 청모 QUIZ</h1><p>지지커플 QUIZ + 지현지원 청모 AWARDS</p>
-<button class="btn" onclick="show('join')">참여하기</button> <button class="btn gray" onclick="show('login')">진행자</button></section>
+<button class="btn" onclick="openJoin()">참여하기</button> <button class="btn gray" onclick="show('login')">진행자</button></section>
 
 <section id="join" class="card hidden"><h2>👋 이름을 입력해주세요</h2><input id="name" maxlength="12" placeholder="예: 김지현"><button class="btn" onclick="join()">입장하기</button></section>
 <section id="wait" class="card center hidden"><div class="big">💍</div><h2 id="wel"></h2><p>진행자가 시작하면 모두 같은 문제로 이동합니다.</p><span class="badge">대기 중</span><br><br><button class="btn gray" onclick="home()">처음 화면으로</button></section>
@@ -59,7 +59,8 @@ const $=x=>document.getElementById(x);
 function show(x){document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));$(x).classList.remove("hidden")}
 async function api(u,m="GET",b){let r=await fetch(u,{method:m,headers:{"Content-Type":"application/json"},body:b?JSON.stringify(b):undefined});let j=await r.json();if(!r.ok)throw Error(j.error||"오류");return j}
 async function init(){let j=await api("/api/questions");qs=j.questions;aws=j.awards}
-async function join(){let n=$("name").value.trim();if(!n)return alert("이름을 입력해주세요.");try{await api("/api/join","POST",{name:n});me=n;$("wel").textContent=n+"님, 입장 완료!";show("wait")}catch(e){alert(e.message)}}
+async function join(){let n=$("name").value.trim();if(!n)return alert("이름을 입력해주세요.");try{await api("/api/join","POST",{name:n});me=n;$("wel").textContent=n+"님, 입장 완료!";history.pushState({app:true,player:true},"","#player");show("wait")}catch(e){alert(e.message)}}
+function openJoin(){$("name").value="";history.pushState({app:true,join:true},"","#join");show("join")}
 function admin(){if($("pw").value==="1234"){show("admin")}else alert("비밀번호가 맞지 않습니다.")}
 async function answer(i){try{await api("/api/answer","POST",{name:me,answer:i})}catch(e){alert(e.message)}}
 async function award(n){try{await api("/api/award","POST",{voter:me,selected:n});/* 상태는 다음 실시간 state에서 갱신 */}catch(e){alert(e.message)}}
@@ -201,8 +202,22 @@ function finalHTML(s,r){
 async function reset(){if(!confirm("참가자와 점수, 투표 결과를 모두 초기화할까요?"))return;try{await api("/api/admin/reset","POST");qs=(await api("/api/questions")).questions;aws=(await api("/api/questions")).awards;renderEditors()}catch(e){alert(e.message)}}
 function home(){
   me="";
+  $("name").value="";
+  history.pushState({app:true,home:true},"","#home");
   show("home");
 }
+window.addEventListener("popstate",()=>{
+  if(me){
+    me="";
+    $("name").value="";
+    show("join");
+    history.replaceState({app:true,join:true},"","#join");
+  }else{
+    $("name").value="";
+    show("home");
+  }
+});
+history.replaceState({app:true,home:true},"","#home");
 async function poll(){try{if(me)await api("/api/heartbeat","POST",{name:me});let s=await api("/api/state");if(!$("admin").classList.contains("hidden"))adminRender(s);else player(s)}catch(e){}}
 init();setInterval(poll,1000);
 </script></body></html>
